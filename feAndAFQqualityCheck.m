@@ -201,7 +201,7 @@ if ~notDefined('classification')
         % generating about 800 extra fibers, which completely screws up the
         % indexing scheme.
         fprintf('\n Likely cause is default interhemisphericsplit behavior of AFQ\n');
-        keyboard
+        %keyboard
         
     end
     
