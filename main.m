@@ -19,7 +19,7 @@ config = loadjson('config.json');
 load(config.AFQ);
 load(config.fe);
 
-mkdir('images')
-[figure, results] = feAndAFQqualityCheck(fe, classification, 'images')
+
+[figure, results] = feAndAFQqualityCheck(fe, classification, pwd)
 
 end
