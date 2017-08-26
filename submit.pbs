@@ -11,7 +11,7 @@ fi
 export MATLABPATH=$MATLABPATH:$SERVICE_DIR
 matlab -nodisplay -nosplash -r main
 
-if [ -s fe_AFQ_StatPlot.png ];
+if [ -s images/fe_AFQ_StatPlot.png ];
 then 
   echo 0 > finished
 else
