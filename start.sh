@@ -4,6 +4,7 @@ if [ -z $SERVICE_DIR ]; then export SERVICE_DIR=`pwd`; fi
 
 #clean up previous job (just in case)
 rm -f finished
+rm -f images.json
 
 if [ $ENV == "IUHPC" ]; then
 	jobid=`qsub $SERVICE_DIR/submit.pbs`
