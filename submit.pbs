@@ -7,7 +7,7 @@ if [ $ENV == "IUHPC" ]; then
 	cd $PBS_O_WORKDIR
 	module load matlab
 fi
-cp $SERVICE_DIR/images.json .
+#cp $SERVICE_DIR/images.json .
 export MATLABPATH=$MATLABPATH:$SERVICE_DIR
 matlab -nodisplay -nosplash -r main
 
