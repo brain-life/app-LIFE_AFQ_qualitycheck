@@ -55,6 +55,12 @@ wbFG=feGet(fe,'fibers acpc');
 % in the fe.fg structure are in image space (which would result in oddities
 % when computing lengths)
 
+for inames=1:length(classification.names)
+leftNames(inames)=~isempty(strfind(classification.names{inames},'Left'));
+rightNames(inames)=~isempty(strfind(classification.names{inames},'Right'));
+interHemiNames(inames)=~leftNames(inames) & ~rightNames(inames);
+end
+
 
 % gets positively weighted streamlines and their indexes
 posIndexes=find(fe.life.fit.weights>0);
@@ -323,16 +329,27 @@ end
         tractProportion(itracts)=length(find(classification.index==itracts))/length(classification.index);
     end
     
-    plotInput(1,:)=tractProportion(1:2:end);
-    plotInput(2,:)=tractProportion(2:2:end);
+       % THIS IS A KUDGE DUE TO THE ISSUES CAUSED BY INTERHEMISPHERIC FIBERS
+    % AND ODD NUMBERS OF TRACTS
+    plotInput=zeros(2,(length(tractProportion)-sum(interHemiNames))/2);
     
-    for ilabels=1:length(tractNames)/2
+    plotInput(1,1)=tractProportion(1);
+    plotInput(2,1)=sum(tractProportion( 2:sum(interHemiNames)));
+     
+    plotInput(1,:)=tractProportion((sum(interHemiNames)+1):2:end);
+    plotInput(2,:)=tractProportion((sum(interHemiNames)+2):2:end);
+    labelNames{1}=tractNames{1};
+    for ilabels=2:(length(tractNames)-(sum(interHemiNames)))/2
         curName=tractNames{ilabels*2};
         spaceindexes=strfind(curName,' ');
+        if ~isempty(spaceindexes)
         labelNames{ilabels}=curName(spaceindexes(1)+1:end);
+        else
+            labelNames{ilabels}=curName;
+        end
     end
     
-    subplot(3,3,[7,8,9])
+    bottomPlot=subplot(3,3,[7,8,9])
     hold on
     bar((plotInput')*100)
     title('Proportion of connectome streamlines in tract')
@@ -340,8 +357,9 @@ end
     xlabel('Tract')
     ylabel('% classificaiton input streamlines in tract (%)')
     ylim([-0 2])
-    set(gca,'xtick',1:1:length(labelNames))
+    set(gca,'xtick',[1:1:length(labelNames)])
     set(gca,'XTickLabel',labelNames, 'FontSize',8,'FontName','Times')
+    bottomPlot.XTickLabelRotation=-45;
     
 else
     %% standard Life Plots
